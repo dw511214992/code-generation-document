@@ -10,7 +10,7 @@ The pipeline can run in 3 kinds of ways: ad-hoc, CI and release.
 ad-hoc means running the code generation pipeline in one time. The pipeline generates codes, builds the generated codes, run tests and upload the generated codes and package to storage account, which can be viewed by customer.
 
 The following is the workflow:
-![ad-hoc](images/ad-hoc.jpg)
+![ad-hoc](images/adhoc.jpg)
 
 ### CI
 CI means the pipeline runs periodly and can be triggered by swagger changes. Customer can use it check the generated codes periodly.
