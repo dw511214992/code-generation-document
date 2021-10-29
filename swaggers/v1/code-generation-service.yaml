@@ -181,11 +181,12 @@ paths:
       tags:
         - Code generation
       parameters:
-        - name: filters
-          in: query
-          description: The filter used in list
+        - name: codeGenerationName
+          in: path
+          description: The name of code generation trigged by customer. It's global unique.
           schema:
             type: string
+          required: true
       responses:
         200:
           description: get code generation detail successfully.
@@ -217,13 +218,23 @@ paths:
           description: The filter used in list
           schema:
             type: string
+        - name: take
+          in: query
+          description: Number of code generation instances to get
+          schema:
+            type: number
+        - name: skip
+          in: query
+          description: Number of code generation instances to skip
+          schema:
+            type: number
       responses:
         200:
           description: list code generation successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CodeGenerationList'
+                $ref: '#/components/schemas/CodeGenerationListResult'
         default:
           description: Default error.
           content:
@@ -705,6 +716,13 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/CodeGeneration'
+    CodeGenerationListResult:
+      type: object
+      properties:
+        count:
+          type: number
+        codeGenerations:
+          $ref: '#/components/schemas/CodeGenerationList'
     CommonResponse:
       description: Common response with message
       properties:
