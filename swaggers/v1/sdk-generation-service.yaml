@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: Code generation Service API
-  description: Code generation Service API
+  title: Sdk generation Service API
+  description: Sdk generation Service API
   version: 1.0.0
 servers:
   - url: https://sdk-pipeline.test.azure-devex-tools.com
@@ -21,7 +21,7 @@ paths:
             text/plain:
               schema:
                 type: string
-                example: welcome to code generation service.
+                example: welcome to sdk generation service.
         default:
           description: Unexpected error
           content:
@@ -43,16 +43,16 @@ paths:
                 $ref: '#/components/schemas/LivenessCheck'
 
   # sdk generations rest apis
-  /code-generation/{codeGenerationName}:
+  /sdkGeneration/{codeGenerationName}:
     put:
-      summary: Trigger a code generation
+      summary: Trigger a sdk generation
       operationId: codeGeneration_put
       tags:
-        - Code generation
+        - Sdk generation
       parameters:
         - name: codeGenerationName
           in: path
-          description: The name of code generation trigged by customer. It's global unique.
+          description: The name of sdk generation trigged by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -60,13 +60,13 @@ paths:
         $ref: '#/components/requestBodies/codeGenerationBody'
       responses:
         200:
-          description: Trigger code generation successfully.
+          description: Trigger sdk generation successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CodeGeneration'
+                $ref: '#/components/schemas/SdkGeneration'
         400:
-          description: The code generation already exists and cannot be triggered again.
+          description: The sdk generation already exists and cannot be triggered again.
           content:
             application/json:
               schema:
@@ -78,26 +78,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     get:
-      summary: Get a code generation
+      summary: Get a sdk generation
       operationId: codeGeneration_get
       tags:
-        - Code generation
+        - Sdk generation
       parameters:
         - name: codeGenerationName
           in: path
-          description: The name of code generation trigged by customer. It's global unique.
+          description: The name of sdk generation trigged by customer. It's global unique.
           schema:
             type: string
           required: true
       responses:
         200:
-          description: get code generation successfully.
+          description: get sdk generation successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CodeGeneration'
+                $ref: '#/components/schemas/SdkGeneration'
         404:
-          description: The code generation doesn't exist.
+          description: The sdk generation doesn't exist.
           content:
             application/json:
               schema:
@@ -109,14 +109,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     patch:
-      summary: Update a code generation
+      summary: Update a sdk generation
       operationId: codeGeneration_update
       tags:
-        - Code generation
+        - Sdk generation
       parameters:
         - name: codeGenerationName
           in: path
-          description: The name of code generation trigged by customer. It's global unique.
+          description: The name of sdk generation trigged by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -124,11 +124,11 @@ paths:
         $ref: '#/components/requestBodies/codeGenerationBody'
       responses:
         200:
-          description: Update code generation successfully.
+          description: Update sdk generation successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CodeGeneration'
+                $ref: '#/components/schemas/SdkGeneration'
         404:
           description: The pipeline doesn't exist.
           content:
@@ -142,22 +142,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     delete:
-      summary: Delete a code generation
+      summary: Delete a sdk generation
       operationId: codeGeneration_delete
       tags:
-        - Code generation
+        - Sdk generation
       parameters:
         - name: codeGenerationName
           in: path
-          description: The name of code generation trigged by customer. It's global unique.
+          description: The name of sdk generation trigged by customer. It's global unique.
           schema:
             type: string
           required: true
       responses:
         200:
-          description: delete code generation successfully.
+          description: delete sdk generation successfully.
         400:
-          description: The code generation cannot be deleted because it's not canceled or completed.
+          description: The sdk generation cannot be deleted because it's not canceled or completed.
           content:
             application/json:
               schema:
@@ -174,26 +174,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /code-generation/{codeGenerationName}/detail:
+  /sdkGeneration/{codeGenerationName}/detail:
     get:
-      summary: Get code generation detail
+      summary: Get sdk generation detail
       operationId: codeGeneration_getDetail
       tags:
-        - Code generation
+        - Sdk generation
       parameters:
         - name: codeGenerationName
           in: path
-          description: The name of code generation trigged by customer. It's global unique.
+          description: The name of sdk generation trigged by customer. It's global unique.
           schema:
             type: string
           required: true
       responses:
         200:
-          description: get code generation detail successfully.
+          description: get sdk generation detail successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CodeGenerationDetail'
+                $ref: '#/components/schemas/SdkGenerationDetail'
         404:
           description: The pipeline doesn't exist.
           content:
@@ -206,12 +206,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /code-generation:
+  /sdkGeneration:
     get:
-      summary: List code generations
+      summary: List sdk generations
       operationId: codeGeneration_list
       tags:
-        - Code generation
+        - Sdk generation
       parameters:
         - name: filters
           in: query
@@ -220,49 +220,49 @@ paths:
             type: string
         - name: take
           in: query
-          description: Number of code generation instances to get
+          description: Number of sdk generation instances to get
           schema:
             type: number
         - name: skip
           in: query
-          description: Number of code generation instances to skip
+          description: Number of sdk generation instances to skip
           schema:
             type: number
       responses:
         200:
-          description: list code generation successfully.
+          description: list sdk generation successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CodeGenerationListResult'
+                $ref: '#/components/schemas/SdkGenerationListResult'
         default:
           description: Default error.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /code-generation/{codeGenerationName}/complete:
+  /sdkGeneration/{codeGenerationName}/complete:
     post:
-      summary: Complete a code generation
+      summary: Complete a sdk generation
       operationId: codeGeneration_complete
       tags:
-        - Code generation
+        - Sdk generation
       parameters:
         - name: codeGenerationName
           in: path
-          description: The name of code generation trigged by customer. It's global unique.
+          description: The name of sdk generation trigged by customer. It's global unique.
           schema:
             type: string
           required: true
       responses:
         200:
-          description: The code generation is completed successfully because it doesn't exist.
+          description: The sdk generation is completed successfully because it doesn't exist.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommonResponse'
         404:
-          description: Cannot find the code generation.
+          description: Cannot find the sdk generation.
           content:
             application/json:
               schema:
@@ -279,28 +279,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /code-generation/{codeGenerationName}/cancel:
+  /sdkGeneration/{codeGenerationName}/cancel:
     post:
-      summary: Cancel a code generation
+      summary: Cancel a sdk generation
       operationId: codeGeneration_cancel
       tags:
-        - Code generation
+        - Sdk generation
       parameters:
         - name: codeGenerationName
           in: path
-          description: The name of code generation trigged by customer. It's global unique.
+          description: The name of sdk generation trigged by customer. It's global unique.
           schema:
             type: string
           required: true
       responses:
         200:
-          description: The code generation is Canceled successfully.
+          description: The sdk generation is Canceled successfully.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommonResponse'
         404:
-          description: Cannot find the code generation because it doesn't exist.
+          description: Cannot find the sdk generation because it doesn't exist.
           content:
             application/json:
               schema:
@@ -317,28 +317,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /code-generation/{codeGenerationName}/run:
+  /sdkGeneration/{codeGenerationName}/run:
     post:
-      summary: Run an existing code generation
+      summary: Run an existing sdk generation
       operationId: codeGeneration_run
       tags:
-        - Code generation
+        - Sdk generation
       parameters:
         - name: codeGenerationName
           in: path
-          description: The name of code generation trigged by customer. It's global unique.
+          description: The name of sdk generation trigged by customer. It's global unique.
           schema:
             type: string
           required: true
       responses:
         200:
-          description: The code generation runs successfully.
+          description: The sdk generation runs successfully.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommonResponse'
         404:
-          description: Cannot find the code generation because it doesn't exist.
+          description: Cannot find the sdk generation because it doesn't exist.
           content:
             application/json:
               schema:
@@ -355,14 +355,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /code-generation/{codeGenerationName}/onboard:
+  /sdkGeneration/{codeGenerationName}/onboard:
     post:
       summary: Create PR to swagger repo and sdk repo to onboard codes
       operationId: codeGeneration_onboard
       parameters:
         - name: codeGenerationName
           in: path
-          description: The name of code generation trigged by customer. It's global unique.
+          description: The name of sdk generation trigged by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -374,7 +374,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CommonResponse'
         404:
-          description: Cannot find the code generation because it doesn't exist.
+          description: Cannot find the sdk generation because it doesn't exist.
           content:
             application/json:
               schema:
@@ -391,14 +391,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /code-generation/{codeGenerationName}/taskResult:
+  /sdkGeneration/{codeGenerationName}/taskResult:
     post:
       summary: Publish pipeline task result
       operationId: codeGeneration_taskResult
       parameters:
         - name: codeGenerationName
           in: path
-          description: The name of code generation trigged by customer. It's global unique.
+          description: The name of sdk generation trigged by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -412,7 +412,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CommonResponse'
         404:
-          description: Cannot publish pipeline task result because code generation doesn't exist.
+          description: Cannot publish pipeline task result because sdk generation doesn't exist.
           content:
             application/json:
               schema:
@@ -427,12 +427,12 @@ paths:
 components:
   requestBodies:
     codeGenerationBody:
-      description: Request body for triggering a code generation.
+      description: Request body for triggering a sdk generation.
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/CodeGeneration'
+            $ref: '#/components/schemas/SdkGeneration'
     PublishTaskResultBody:
       description: Request body for publishing pipeline task result.
       required: true
@@ -634,7 +634,7 @@ components:
         - $ref: '#/components/schemas/PipelineTaskResultCommon'
         - $ref: '#/components/schemas/CodeGenerateTaskResult'
         - $ref: '#/components/schemas/TestTaskResult'
-    CodeGeneration:
+    SdkGeneration:
       type: object
       required:
         - resourceProvider
@@ -642,7 +642,7 @@ components:
       properties:
         name:
           type: string
-          description: The name of code generation trigged by customer. It's global unique.
+          description: The name of sdk generation trigged by customer. It's global unique.
           readOnly: true
         resourceProvider:
           type: string
@@ -665,7 +665,7 @@ components:
           type: string
           description: The aliases of owners.
         codeGenerationRepo:
-          description: The repository information of code generation.
+          description: The repository information of sdk generation.
           type: object
           allOf:
             - $ref: '#/components/schemas/RepositoryInformation'
@@ -680,7 +680,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/RepositoryInformation'
         type:
-          description: Type of triggered code generation. ad-hoc represents triggering one time. ci represents triggering periodly. release represents triggering one time and creating a pr.
+          description: Type of triggered sdk generation. ad-hoc represents triggering one time. ci represents triggering periodly. release represents triggering one time and creating a pr.
           type: string
           enum: [ad-hoc, CI, release]
           default: ad-hoc
@@ -700,11 +700,11 @@ components:
             - cancelled
             - pipelineCompleted
             - completed
-    CodeGenerationDetail:
-      description: Code generation details.
+    SdkGenerationDetail:
+      description: Sdk generation details.
       type: object
       allOf:
-        - $ref: '#/components/schemas/CodeGeneration'
+        - $ref: '#/components/schemas/SdkGeneration'
       properties:
         taskResult:
           description: Task result of last running pipeline.
@@ -712,17 +712,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PipelineTaskResult'
-    CodeGenerationList:
+    SdkGenerationList:
       type: array
       items:
-        $ref: '#/components/schemas/CodeGeneration'
-    CodeGenerationListResult:
+        $ref: '#/components/schemas/SdkGeneration'
+    SdkGenerationListResult:
       type: object
       properties:
         count:
           type: number
         codeGenerations:
-          $ref: '#/components/schemas/CodeGenerationList'
+          $ref: '#/components/schemas/SdkGenerationList'
     CommonResponse:
       description: Common response with message
       properties:

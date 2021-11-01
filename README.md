@@ -25,7 +25,7 @@ The following is the workflow:
 ![release](images/release.jpg)
 
 ## Code Generate Service
-In the above workflows, we can find the customer mainly interact with code generate service. To dive into the rest apis provided by service, please go to [swagger](swaggers/v1/code-generation-service.yaml).
+In the above workflows, we can find the customer mainly interact with code generate service. To dive into the rest apis provided by service, please go to [swagger](swaggers/v1/sdk-generation-service.yaml).
 
 ## DataBase
 Code Generate Service store the information of code generation in MongoDB, and there are two collections: codeGenerations and sdkGenerationResults.
