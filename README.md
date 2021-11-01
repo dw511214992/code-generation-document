@@ -1,13 +1,13 @@
-# Code Generation Document
+# SDK Generation Document
 
-This document targets on describing the workflow and designs of code generation pipeline.
+This document targets on describing the workflow and designs of sdk generation pipeline.
 
-## Code Generation Work Flow
+## SDK Generation Work Flow
 
 The pipeline can run in 3 kinds of ways: ad-hoc, CI and release.
 
 ### ad-hoc
-ad-hoc means running the code generation pipeline in one time. The pipeline generates codes, builds the generated codes, run tests and upload the generated codes and package to storage account, which can be viewed by customer.
+ad-hoc means running the sdk generation pipeline in one time. The pipeline generates codes, builds the generated codes, run tests and upload the generated codes and package to storage account, which can be viewed by customer.
 
 The following is the workflow:
 ![ad-hoc](images/adhoc.jpg)
@@ -28,7 +28,7 @@ The following is the workflow:
 In the above workflows, we can find the customer mainly interact with code generate service. To dive into the rest apis provided by service, please go to [swagger](swaggers/v1/sdk-generation-service.yaml).
 
 ## DataBase
-Code Generate Service store the information of code generation in MongoDB, and there are two collections: codeGenerations and sdkGenerationResults.
+Code Generate Service store the information of sdk generation in MongoDB, and there are two collections: codeGenerations and sdkGenerationResults.
 
 ### codeGenerations
 Collection codeGenerations stores the information of codeGeneration instance, and the schema is following:
