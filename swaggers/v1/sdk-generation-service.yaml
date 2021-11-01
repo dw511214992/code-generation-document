@@ -43,21 +43,21 @@ paths:
                 $ref: '#/components/schemas/LivenessCheck'
 
   # sdk generations rest apis
-  /sdkGeneration/{codeGenerationName}:
+  /sdkGeneration/{sdkGenerationName}:
     put:
       summary: Trigger a sdk generation
-      operationId: codeGeneration_put
+      operationId: sdkGeneration_put
       tags:
         - Sdk generation
       parameters:
-        - name: codeGenerationName
+        - name: sdkGenerationName
           in: path
           description: The name of sdk generation trigged by customer. It's global unique.
           schema:
             type: string
           required: true
       requestBody:
-        $ref: '#/components/requestBodies/codeGenerationBody'
+        $ref: '#/components/requestBodies/sdkGenerationBody'
       responses:
         200:
           description: Trigger sdk generation successfully.
@@ -79,11 +79,11 @@ paths:
                 $ref: '#/components/schemas/Error'
     get:
       summary: Get a sdk generation
-      operationId: codeGeneration_get
+      operationId: sdkGeneration_get
       tags:
         - Sdk generation
       parameters:
-        - name: codeGenerationName
+        - name: sdkGenerationName
           in: path
           description: The name of sdk generation trigged by customer. It's global unique.
           schema:
@@ -110,18 +110,18 @@ paths:
                 $ref: '#/components/schemas/Error'
     patch:
       summary: Update a sdk generation
-      operationId: codeGeneration_update
+      operationId: sdkGeneration_update
       tags:
         - Sdk generation
       parameters:
-        - name: codeGenerationName
+        - name: sdkGenerationName
           in: path
           description: The name of sdk generation trigged by customer. It's global unique.
           schema:
             type: string
           required: true
       requestBody:
-        $ref: '#/components/requestBodies/codeGenerationBody'
+        $ref: '#/components/requestBodies/sdkGenerationBody'
       responses:
         200:
           description: Update sdk generation successfully.
@@ -143,11 +143,11 @@ paths:
                 $ref: '#/components/schemas/Error'
     delete:
       summary: Delete a sdk generation
-      operationId: codeGeneration_delete
+      operationId: sdkGeneration_delete
       tags:
         - Sdk generation
       parameters:
-        - name: codeGenerationName
+        - name: sdkGenerationName
           in: path
           description: The name of sdk generation trigged by customer. It's global unique.
           schema:
@@ -174,14 +174,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /sdkGeneration/{codeGenerationName}/detail:
+  /sdkGeneration/{sdkGenerationName}/detail:
     get:
       summary: Get sdk generation detail
-      operationId: codeGeneration_getDetail
+      operationId: sdkGeneration_getDetail
       tags:
         - Sdk generation
       parameters:
-        - name: codeGenerationName
+        - name: sdkGenerationName
           in: path
           description: The name of sdk generation trigged by customer. It's global unique.
           schema:
@@ -209,7 +209,7 @@ paths:
   /sdkGeneration:
     get:
       summary: List sdk generations
-      operationId: codeGeneration_list
+      operationId: sdkGeneration_list
       tags:
         - Sdk generation
       parameters:
@@ -241,14 +241,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /sdkGeneration/{codeGenerationName}/complete:
+  /sdkGeneration/{sdkGenerationName}/complete:
     post:
       summary: Complete a sdk generation
-      operationId: codeGeneration_complete
+      operationId: sdkGeneration_complete
       tags:
         - Sdk generation
       parameters:
-        - name: codeGenerationName
+        - name: sdkGenerationName
           in: path
           description: The name of sdk generation trigged by customer. It's global unique.
           schema:
@@ -279,14 +279,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /sdkGeneration/{codeGenerationName}/cancel:
+  /sdkGeneration/{sdkGenerationName}/cancel:
     post:
       summary: Cancel a sdk generation
-      operationId: codeGeneration_cancel
+      operationId: sdkGeneration_cancel
       tags:
         - Sdk generation
       parameters:
-        - name: codeGenerationName
+        - name: sdkGenerationName
           in: path
           description: The name of sdk generation trigged by customer. It's global unique.
           schema:
@@ -317,14 +317,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /sdkGeneration/{codeGenerationName}/run:
+  /sdkGeneration/{sdkGenerationName}/run:
     post:
       summary: Run an existing sdk generation
-      operationId: codeGeneration_run
+      operationId: sdkGeneration_run
       tags:
         - Sdk generation
       parameters:
-        - name: codeGenerationName
+        - name: sdkGenerationName
           in: path
           description: The name of sdk generation trigged by customer. It's global unique.
           schema:
@@ -355,12 +355,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /sdkGeneration/{codeGenerationName}/onboard:
+  /sdkGeneration/{sdkGenerationName}/onboard:
     post:
       summary: Create PR to swagger repo and sdk repo to onboard codes
-      operationId: codeGeneration_onboard
+      operationId: sdkGeneration_onboard
       parameters:
-        - name: codeGenerationName
+        - name: sdkGenerationName
           in: path
           description: The name of sdk generation trigged by customer. It's global unique.
           schema:
@@ -391,12 +391,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /sdkGeneration/{codeGenerationName}/taskResult:
+  /sdkGeneration/{sdkGenerationName}/taskResult:
     post:
       summary: Publish pipeline task result
-      operationId: codeGeneration_taskResult
+      operationId: sdkGeneration_taskResult
       parameters:
-        - name: codeGenerationName
+        - name: sdkGenerationName
           in: path
           description: The name of sdk generation trigged by customer. It's global unique.
           schema:
@@ -426,7 +426,7 @@ paths:
 
 components:
   requestBodies:
-    codeGenerationBody:
+    sdkGenerationBody:
       description: Request body for triggering a sdk generation.
       required: true
       content:
@@ -664,7 +664,7 @@ components:
         owners:
           type: string
           description: The aliases of owners.
-        codeGenerationRepo:
+        sdkGenerationRepo:
           description: The repository information of sdk generation.
           type: object
           allOf:
@@ -721,7 +721,7 @@ components:
       properties:
         count:
           type: number
-        codeGenerations:
+        sdkGenerations:
           $ref: '#/components/schemas/SdkGenerationList'
     CommonResponse:
       description: Common response with message
