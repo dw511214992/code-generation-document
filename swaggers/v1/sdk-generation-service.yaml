@@ -1,0 +1,739 @@
+openapi: 3.0.0
+info:
+  title: Sdk generation Service API
+  description: Sdk generation Service API
+  version: 1.0.0
+servers:
+  - url: https://sdk-pipeline.test.azure-devex-tools.com
+    description: Test Server
+
+paths:
+  /:
+    get:
+      summary: Welcome page
+      tags:
+        - welcome page
+      operationId: WelcomePage
+      responses:
+        200:
+          description: Welcome page response
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: welcome to sdk generation service.
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /alive:
+    get:
+      tags:
+        - Linvess check
+      summary: Liveness check page
+      operationId: livenessCheck
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LivenessCheck'
+
+  # sdk generations rest apis
+  /sdkGeneration/{codeGenerationName}:
+    put:
+      summary: Trigger a sdk generation
+      operationId: codeGeneration_put
+      tags:
+        - Sdk generation
+      parameters:
+        - name: codeGenerationName
+          in: path
+          description: The name of sdk generation trigged by customer. It's global unique.
+          schema:
+            type: string
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/codeGenerationBody'
+      responses:
+        200:
+          description: Trigger sdk generation successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SdkGeneration'
+        400:
+          description: The sdk generation already exists and cannot be triggered again.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Default error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      summary: Get a sdk generation
+      operationId: codeGeneration_get
+      tags:
+        - Sdk generation
+      parameters:
+        - name: codeGenerationName
+          in: path
+          description: The name of sdk generation trigged by customer. It's global unique.
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: get sdk generation successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SdkGeneration'
+        404:
+          description: The sdk generation doesn't exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Default error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update a sdk generation
+      operationId: codeGeneration_update
+      tags:
+        - Sdk generation
+      parameters:
+        - name: codeGenerationName
+          in: path
+          description: The name of sdk generation trigged by customer. It's global unique.
+          schema:
+            type: string
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/codeGenerationBody'
+      responses:
+        200:
+          description: Update sdk generation successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SdkGeneration'
+        404:
+          description: The pipeline doesn't exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Default error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a sdk generation
+      operationId: codeGeneration_delete
+      tags:
+        - Sdk generation
+      parameters:
+        - name: codeGenerationName
+          in: path
+          description: The name of sdk generation trigged by customer. It's global unique.
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: delete sdk generation successfully.
+        400:
+          description: The sdk generation cannot be deleted because it's not canceled or completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: The pipeline doesn't exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Default error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /sdkGeneration/{codeGenerationName}/detail:
+    get:
+      summary: Get sdk generation detail
+      operationId: codeGeneration_getDetail
+      tags:
+        - Sdk generation
+      parameters:
+        - name: codeGenerationName
+          in: path
+          description: The name of sdk generation trigged by customer. It's global unique.
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: get sdk generation detail successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SdkGenerationDetail'
+        404:
+          description: The pipeline doesn't exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Default error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /sdkGeneration:
+    get:
+      summary: List sdk generations
+      operationId: codeGeneration_list
+      tags:
+        - Sdk generation
+      parameters:
+        - name: filters
+          in: query
+          description: The filter used in list
+          schema:
+            type: string
+        - name: take
+          in: query
+          description: Number of sdk generation instances to get
+          schema:
+            type: number
+        - name: skip
+          in: query
+          description: Number of sdk generation instances to skip
+          schema:
+            type: number
+      responses:
+        200:
+          description: list sdk generation successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SdkGenerationListResult'
+        default:
+          description: Default error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /sdkGeneration/{codeGenerationName}/complete:
+    post:
+      summary: Complete a sdk generation
+      operationId: codeGeneration_complete
+      tags:
+        - Sdk generation
+      parameters:
+        - name: codeGenerationName
+          in: path
+          description: The name of sdk generation trigged by customer. It's global unique.
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: The sdk generation is completed successfully because it doesn't exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+        404:
+          description: Cannot find the sdk generation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        400:
+          description: The pipeline cannot be completed because its status is completed or canceled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Default error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /sdkGeneration/{codeGenerationName}/cancel:
+    post:
+      summary: Cancel a sdk generation
+      operationId: codeGeneration_cancel
+      tags:
+        - Sdk generation
+      parameters:
+        - name: codeGenerationName
+          in: path
+          description: The name of sdk generation trigged by customer. It's global unique.
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: The sdk generation is Canceled successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+        404:
+          description: Cannot find the sdk generation because it doesn't exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        400:
+          description: The pipeline cannot be completed because its status is completed or canceled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Default error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /sdkGeneration/{codeGenerationName}/run:
+    post:
+      summary: Run an existing sdk generation
+      operationId: codeGeneration_run
+      tags:
+        - Sdk generation
+      parameters:
+        - name: codeGenerationName
+          in: path
+          description: The name of sdk generation trigged by customer. It's global unique.
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: The sdk generation runs successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+        404:
+          description: Cannot find the sdk generation because it doesn't exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        400:
+          description: The pipeline cannot be run because its status is in progress.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Default error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /sdkGeneration/{codeGenerationName}/onboard:
+    post:
+      summary: Create PR to swagger repo and sdk repo to onboard codes
+      operationId: codeGeneration_onboard
+      parameters:
+        - name: codeGenerationName
+          in: path
+          description: The name of sdk generation trigged by customer. It's global unique.
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: Onboard codes successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+        404:
+          description: Cannot find the sdk generation because it doesn't exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        400:
+          description: Cannot onboard codes because its status is not pipeline completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Default error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /sdkGeneration/{codeGenerationName}/taskResult:
+    post:
+      summary: Publish pipeline task result
+      operationId: codeGeneration_taskResult
+      parameters:
+        - name: codeGenerationName
+          in: path
+          description: The name of sdk generation trigged by customer. It's global unique.
+          schema:
+            type: string
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/PublishTaskResultBody'
+      responses:
+        200:
+          description: Pipeline task result codes successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+        404:
+          description: Cannot publish pipeline task result because sdk generation doesn't exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Default error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  requestBodies:
+    codeGenerationBody:
+      description: Request body for triggering a sdk generation.
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SdkGeneration'
+    PublishTaskResultBody:
+      description: Request body for publishing pipeline task result.
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PublishTaskResult'
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+      required:
+        - code
+        - message
+    LivenessCheck:
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+      required:
+        - code
+        - message
+    RepositoryInformation:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of repository.
+          enum:
+            - github
+            - devops
+          default: github
+        path:
+          type: string
+          description: The path of repo.
+        branch:
+          type: string
+          description: The branch of repo
+    BaseMessageRecord:
+      type: object
+      properties:
+        level:
+          type: string
+          enum:
+            - Info
+            - Warning
+            - Error
+        message:
+          type: string
+        time:
+          type: string
+        context:
+          type: object
+          properties:
+            toolVersion:
+              type: string
+        extra: {}
+    ResultMessageRecord:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseMessageRecord'
+      properties:
+        type:
+          type: string
+          default: Result
+        id:
+          type: string
+        code:
+          type: string
+        docUrl:
+          type: string
+        paths:
+          type: object
+          properties:
+            tag:
+              type: string
+            path:
+              type: string
+    RawMessageRecord:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseMessageRecord'
+      properties:
+        type:
+          type: string
+          default: Raw
+    MarkdownMessageRecord:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseMessageRecord'
+      properties:
+        type:
+          type: string
+          default: Markdown
+        mode:
+          type: string
+          enum:
+            - replace
+            - append
+    MessageRecord:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/ResultMessageRecord'
+        - $ref: '#/components/schemas/RawMessageRecord'
+        - $ref: '#/components/schemas/MarkdownMessageRecord'
+    PipelineTaskResultCommon:
+      type: object
+      required:
+        - name
+        - pipelineId
+        - checkRunId
+        - checkRunUrl
+        - queuedAt
+      properties:
+        name:
+          description: The name of task.
+          type: string
+        pipelineId:
+          description: The pipeline id
+          type: string
+        subTaskKey:
+          type: string
+        env:
+          type: string
+        suppressed:
+          type: boolean
+        subTitle:
+          type: string
+        parentName:
+          type: string
+        status:
+          type: string
+          enum:
+            - queued
+            - in_progress
+            - completed
+            - skipped
+            - completed_with_result
+        result:
+          type: string
+          enum:
+            - success
+            - failure
+            - timed_out
+        errorCount:
+          type: number
+        warningCount:
+          type: number
+        checkRunId:
+          type: number
+        checkRunUrl:
+          type: string
+        checkState:
+          type: string
+        azurePipelineUrl:
+          type: string
+        pipelineJobId:
+          type: string
+        pipelineTaskId:
+          type: string
+        queuedAt:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+        logUrl:
+          type: string
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageRecord'
+    CodeGenerateTaskResult:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PipelineTaskResultCommon'
+      properties:
+        codeUrl:
+          type: string
+    TestTaskResult:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PipelineTaskResultCommon'
+      properties:
+        apiCoverage:
+          type: number
+        codeCoverage:
+          type: number
+    PipelineTaskResult:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/PipelineTaskResultCommon'
+        - $ref: '#/components/schemas/CodeGenerateTaskResult'
+        - $ref: '#/components/schemas/TestTaskResult'
+    SdkGeneration:
+      type: object
+      required:
+        - resourceProvider
+        - serviceType
+      properties:
+        name:
+          type: string
+          description: The name of sdk generation trigged by customer. It's global unique.
+          readOnly: true
+        resourceProvider:
+          type: string
+          description: Which resource provider do you want to generate codes.
+        resources:
+          type: string
+          description: Which resource do you want to generate codes. Generate all resources by default.
+        serviceType:
+          type: string
+          enum: [resource-manager, data-plane]
+          default: resource-manager
+          description: Generate management sdk or data plane sdk.
+        tag:
+          type: string
+          description: Which tag of swagger do you want to use to generate codes. Use default tag if not input.
+        commit:
+          type: string
+          description: Swagger commit it. Use latest commit id if not input.
+        owners:
+          type: string
+          description: The aliases of owners.
+        codeGenerationRepo:
+          description: The repository information of sdk generation.
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/RepositoryInformation'
+        swaggerRepo:
+          description: The repository information of swagger.
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/RepositoryInformation'
+        sdkRepo:
+          description: The repository information of sdk.
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/RepositoryInformation'
+        type:
+          description: Type of triggered sdk generation. ad-hoc represents triggering one time. ci represents triggering periodly. release represents triggering one time and creating a pr.
+          type: string
+          enum: [ad-hoc, CI, release]
+          default: ad-hoc
+        lastPipelineBuildID:
+          description: The id of last build pipeline.
+          type: string
+        sdkPR:
+          description: The PR created by pipeline.
+          type: string
+        status:
+          description: The status of pipeline.
+          type: string
+          enum:
+            - submit
+            - in_progress
+            - failed
+            - cancelled
+            - pipelineCompleted
+            - completed
+    SdkGenerationDetail:
+      description: Sdk generation details.
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SdkGeneration'
+      properties:
+        taskResult:
+          description: Task result of last running pipeline.
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineTaskResult'
+    SdkGenerationList:
+      type: array
+      items:
+        $ref: '#/components/schemas/SdkGeneration'
+    SdkGenerationListResult:
+      type: object
+      properties:
+        count:
+          type: number
+        codeGenerations:
+          $ref: '#/components/schemas/SdkGenerationList'
+    CommonResponse:
+      description: Common response with message
+      properties:
+        message:
+          type: string
+        statusCode:
+          type: number
+    PublishTaskResult:
+      type: object
+      properties:
+        pipelineBuildId:
+          type: string
+        taskResult:
+          $ref: '#/components/schemas/PipelineTaskResult'
