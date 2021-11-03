@@ -637,69 +637,93 @@ components:
     SdkGeneration:
       type: object
       required:
-        - resourceProvider
-        - serviceType
+        - codeGenerationInfo
       properties:
         name:
           type: string
           description: The name of sdk generation trigged by customer. It's global unique.
           readOnly: true
-        resourceProvider:
+        triggerType:
+          description: Type of triggered sdk generation. ad-hoc represents triggering one time. ci represents triggering periodly. release represents triggering one time and creating a pr.
           type: string
-          description: Which resource provider do you want to generate codes.
-        resources:
-          type: string
-          description: Which resource do you want to generate codes. Generate all resources by default.
-        serviceType:
-          type: string
-          enum: [resource-manager, data-plane]
-          default: resource-manager
-          description: Generate management sdk or data plane sdk.
-        tag:
-          type: string
-          description: Which tag of swagger do you want to use to generate codes. Use default tag if not input.
-        commit:
-          type: string
-          description: Swagger commit it. Use latest commit id if not input.
+          enum: [ ad-hoc, CI, release ]
+          default: ad-hoc
+        codeGenerationInfo:
+          type: object
+          required:
+            - resourceProvider
+            - serviceType
+          properties:
+            resourceProvider:
+              type: string
+              description: Which resource provider do you want to generate codes.
+            resourcesToGenerate:
+              type: string
+              description: Which resource do you want to generate codes. Generate all resources by default.
+            serviceType:
+              type: string
+              enum: [ resource-manager, data-plane ]
+              default: resource-manager
+              description: Generate management sdk or data plane sdk.
+            tag:
+              type: string
+              description: Which tag of swagger do you want to use to generate codes. Use default tag if not input.
+        pipelineInfo:
+          type: object
+          properties:
+            pipelineRepo:
+              description: The repository information of sdk generation pipeline.
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/RepositoryInformation'
+            ignoreFailures:
+              description: Defined failures will be ignored.
+              type: array
+              items:
+                type: string
+            stages:
+              description: Stages to run. Empty represents all stags.
+              type: array
+              items:
+                type: string
+            lastPipelineBuildID:
+              description: The id of last build pipeline.
+              type: string
+            status:
+              description: The status of pipeline.
+              type: string
+              enum:
+                - submit
+                - in_progress
+                - failed
+                - cancelled
+                - pipelineCompleted
+                - completed
+        swaggerInfo:
+          type: object
+          properties:
+            swaggerRepo:
+              description: The repository information of swagger.
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/RepositoryInformation'
+            swaggerPR:
+              description: The PR created by pipeline.
+              type: string
+        sdkInfo:
+          type: object
+          properties:
+            sdkRepo:
+              description: The repository information of sdk.
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/RepositoryInformation'
+            sdkPR:
+              description: The PR created by pipeline.
+              type: string
         owners:
           type: string
           description: The aliases of owners.
-        sdkGenerationRepo:
-          description: The repository information of sdk generation.
-          type: object
-          allOf:
-            - $ref: '#/components/schemas/RepositoryInformation'
-        swaggerRepo:
-          description: The repository information of swagger.
-          type: object
-          allOf:
-            - $ref: '#/components/schemas/RepositoryInformation'
-        sdkRepo:
-          description: The repository information of sdk.
-          type: object
-          allOf:
-            - $ref: '#/components/schemas/RepositoryInformation'
-        type:
-          description: Type of triggered sdk generation. ad-hoc represents triggering one time. ci represents triggering periodly. release represents triggering one time and creating a pr.
-          type: string
-          enum: [ad-hoc, CI, release]
-          default: ad-hoc
-        lastPipelineBuildID:
-          description: The id of last build pipeline.
-          type: string
-        sdkPR:
-          description: The PR created by pipeline.
-          type: string
-        status:
-          description: The status of pipeline.
-          type: string
-          enum:
-            - submit
-            - in_progress
-            - failed
-            - cancelled
-            - pipelineCompleted
-            - completed
     SdkGenerationDetail:
       description: Sdk generation details.
       type: object

@@ -30,28 +30,36 @@ In the above workflows, we can find the customer mainly interact with code gener
 ## DataBase
 Code Generate Service store the information of sdk generation in MongoDB, and there are two collections: codeGenerations and sdkGenerationResults.
 
-### codeGenerations
+### sdkGenerations
 Collection codeGenerations stores the information of codeGeneration instance, and the schema is following:
 
 ```typescript
-export class CodeGeneration {
+export class SdkGeneration {
     name: string;
-    resourceProvider: string;
-    serviceType: string;
-    resourcesToGenerate: string;
-    tag: string;
-    sdk: string;
-    swaggerRepo: RepoInfo;
-    sdkRepo: RepoInfo;
-    codegenRepo: RepoInfo;
-    type: string;
-    ignoreFailure: string;
-    stages: string;
-    lastPipelineBuildID: string;
-    swaggerPR: string;
-    codePR: string;
-    status: string;
-    owners: string;
+    triggerType: string;
+    codeGenerationInfo: {
+        resourceProvider: string;
+        serviceType: string;
+        resourcesToGenerate: string;
+        tag: string;
+        sdkName: string;
+    };
+    pipelineInfo: {
+        pipelineRepo: RepoInfo;
+        ignoreFailures: string[];
+        stages: string[];
+        lastPipelineBuildID: string;
+        status: string;
+    };
+    swaggerInfo: {
+        swaggerRepo: RepoInfo;
+        swaggerPR: string;
+    };
+    sdkInfo: {
+        sdkRepo: RepoInfo;
+        sdkPR: string;
+    };
+    owners: string[];
 }
 export interface RepoInfo {
     type: string;
@@ -67,15 +75,15 @@ Collection sdkGenerationResults stores the task results of pipeline, and the sch
 export class TaskResult {
     key: string;
     pipelineBuildId: string;
-    taskResult: CodegenPipelineTaskResult;
+    taskResult: SdkGenerationPipelineTaskResult;
 }
 
-export type CodegenPipelineTaskResult =
-    | CodegenPipelineTaskResultCommon
-    | CodegenCodeGenerateTaskResult
+export type SdkGenerationPipelineTaskResult =
+    | SdkGenerationPipelineTaskResultCommon
+    | SdkGenerationCodeGenerateTaskResult
     | TestTaskResult;
 
-export type CodegenPipelineTaskResultCommon = {
+export type SdkGenerationPipelineTaskResultCommon = {
     name: string;
     pipelineId: string;
     subTaskKey?: string;
@@ -101,11 +109,11 @@ export type CodegenPipelineTaskResultCommon = {
     messages?: MessageRecord[];
 };
 
-export type CodegenCodeGenerateTaskResult = CodegenPipelineTaskResultCommon & {
+export type SdkGenerationCodeGenerateTaskResult = SdkGenerationPipelineTaskResultCommon & {
     codeUrl?: string;
 };
 
-export type TestTaskResult = CodegenPipelineTaskResultCommon & {
+export type TestTaskResult = SdkGenerationPipelineTaskResultCommon & {
     apiCoverage?: number;
     codeCoverage?: number;
 };
