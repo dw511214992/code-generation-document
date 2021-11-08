@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: Sdk generation Service API
-  description: Sdk generation Service API
+  title: SDK generation Service API
+  description: SDK generation Service API
   version: 1.0.0
 servers:
   - url: https://sdk-pipeline.test.azure-devex-tools.com
@@ -13,7 +13,7 @@ paths:
       summary: Welcome page
       tags:
         - welcome page
-      operationId: WelcomePage
+      operationId: WelcomePage_Get
       responses:
         200:
           description: Welcome page response
@@ -33,7 +33,7 @@ paths:
       tags:
         - Linvess check
       summary: Liveness check page
-      operationId: livenessCheck
+      operationId: livenessCheck_Get
       responses:
         200:
           description: OK
@@ -52,7 +52,7 @@ paths:
       parameters:
         - name: sdkGenerationName
           in: path
-          description: The name of sdk generation trigged by customer. It's global unique.
+          description: The name of sdk generation triggered by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -85,7 +85,7 @@ paths:
       parameters:
         - name: sdkGenerationName
           in: path
-          description: The name of sdk generation trigged by customer. It's global unique.
+          description: The name of sdk generation triggered by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -116,7 +116,7 @@ paths:
       parameters:
         - name: sdkGenerationName
           in: path
-          description: The name of sdk generation trigged by customer. It's global unique.
+          description: The name of sdk generation triggered by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -149,7 +149,7 @@ paths:
       parameters:
         - name: sdkGenerationName
           in: path
-          description: The name of sdk generation trigged by customer. It's global unique.
+          description: The name of sdk generation triggered by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -183,7 +183,7 @@ paths:
       parameters:
         - name: sdkGenerationName
           in: path
-          description: The name of sdk generation trigged by customer. It's global unique.
+          description: The name of sdk generation triggered by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -250,7 +250,7 @@ paths:
       parameters:
         - name: sdkGenerationName
           in: path
-          description: The name of sdk generation trigged by customer. It's global unique.
+          description: The name of sdk generation triggered by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -288,7 +288,7 @@ paths:
       parameters:
         - name: sdkGenerationName
           in: path
-          description: The name of sdk generation trigged by customer. It's global unique.
+          description: The name of sdk generation triggered by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -317,7 +317,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /sdkGeneration/{sdkGenerationName}/run:
+  /sdkGeneration/{sdkGenerationName}/start:
     post:
       summary: Run an existing sdk generation
       operationId: sdkGeneration_run
@@ -326,7 +326,7 @@ paths:
       parameters:
         - name: sdkGenerationName
           in: path
-          description: The name of sdk generation trigged by customer. It's global unique.
+          description: The name of sdk generation triggered by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -362,7 +362,7 @@ paths:
       parameters:
         - name: sdkGenerationName
           in: path
-          description: The name of sdk generation trigged by customer. It's global unique.
+          description: The name of sdk generation triggered by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -398,7 +398,7 @@ paths:
       parameters:
         - name: sdkGenerationName
           in: path
-          description: The name of sdk generation trigged by customer. It's global unique.
+          description: The name of sdk generation triggered by customer. It's global unique.
           schema:
             type: string
           required: true
@@ -641,7 +641,7 @@ components:
       properties:
         name:
           type: string
-          description: The name of sdk generation trigged by customer. It's global unique.
+          description: The name of sdk generation triggered by customer. It's global unique.
           readOnly: true
         triggerType:
           description: Type of triggered sdk generation. ad-hoc represents triggering one time. ci represents triggering periodly. release represents triggering one time and creating a pr.
